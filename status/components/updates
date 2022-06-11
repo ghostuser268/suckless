@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#sleep 6000
+icon=
+packages=$(pacman -Qu |  grep -c  "[ignored]")
+
+printf " %s %s " "$icon" "$packages"

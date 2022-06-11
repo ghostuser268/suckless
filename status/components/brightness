@@ -1,0 +1,7 @@
+#!/bin/sh
+
+icon=
+
+brightness=$(xbacklight -get)
+
+printf " %s %s " "$icon" "$brightness"

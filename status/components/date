@@ -1,0 +1,13 @@
+#! /bin/sh
+
+case $BUTTON in 
+	1) st -e bpytop ;;
+	2) st -e nvim ~/suckless/dwm/config.h ;;
+	3) st -e nvim ~/suckless/status/components/date ;;
+esac
+
+date=$( date | awk '{print $4}' )
+icon= 
+
+echo " ${icon} ${date:0:5} "
+

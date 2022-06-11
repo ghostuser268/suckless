@@ -1,0 +1,19 @@
+#! /bin/sh
+
+
+path=~/suckless/status/components
+update=$path/updates
+net=$path/net
+temp=$path/temp
+mem=$path/memory
+disk=$path/disk
+volume=$path/volume
+battery=$path/battery
+date=$path/date
+
+
+while true ; do
+	sleep 1s 
+	xsetroot -name "$( echo -e '\x01 '$($update)' \x02'$($net)'\x03'$($temp)'\x04'$($mem)'\x05'$($disk)'\x06'$($volume)'\x07'$($battery)'\x08'$($date))"
+done 
+

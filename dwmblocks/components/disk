@@ -1,0 +1,13 @@
+#! /bin/sh
+
+case $BUTTON in 
+	1) st -e bpytop;;
+	2)  ;;
+	3) st -e nvim ~/suckless/status/components/disk ;;
+esac
+
+icon=""
+disk="$(df -Th | awk '/ext4/ {print $4 \"|\" $3}')"
+
+printf " %s %s " "$icon" "$disk"
+

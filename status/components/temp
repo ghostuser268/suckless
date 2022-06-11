@@ -1,0 +1,13 @@
+#! /bin/sh
+
+case $BUTTON in 
+	1) st -e bpytop ;;
+	2) st -e radeontop -c ;;
+	3) st -e nvim ~/suckless/status/components/temp ;;
+esac
+
+gpu=$(sensors | awk '/edge/ {print $2}')
+temp=$(cat '/sys/class/hwmon/hwmon3/temp1_input')
+icon=
+
+echo " ${icon} | C:${temp:0:2}° G:${gpu:1:2}° "

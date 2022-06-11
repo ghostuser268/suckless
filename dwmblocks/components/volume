@@ -1,0 +1,15 @@
+#! /bin/sh
+
+
+case $BUTTON in
+	1) st -e alsamixer -c 1;;
+	2) ;;
+	3) st -e nvim ~/suckless/status/components/volume;;
+esac
+
+
+
+volume=$(amixer -c 1 sget Master | awk '/Mono/ {printf $4} ')
+icon=""
+
+echo " $icon ${volume:1:3} "

@@ -1,0 +1,13 @@
+#! /bin/sh
+
+case $BUTTON in 
+	1) st -e bpytop ;;
+	2)  ;;
+	3) st -e nvim ~/suckless/status/components/memory ;;
+esac
+
+holder="$( free -h | awk '/Mem/ {printf $3"/"$2}')"
+icon=""
+
+printf " %s %s " "$icon" "$holder"
+
