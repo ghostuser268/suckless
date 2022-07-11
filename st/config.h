@@ -76,7 +76,7 @@ static int bellvolume = 0;
 
 /* default TERM value */
 char *termname = "st-256color";
-float alpha = 0.87;
+float alpha = 0.85;
 
 /*
  * spaces per tab
@@ -95,51 +95,40 @@ float alpha = 0.87;
  */
 unsigned int tabspaces = 8;
 
-/* Terminal colors (16 first used in escape sequence) */
-//#include "/home/ghostuser/personal/suckless/st/colorschemes/rosepine.h"
-//
 static const char *colorname[] = {
-
-  /* 8 normal colors */
-  [0] = "#101010", /* black   */
-  [1] = "#7c7c7c", /* red     */
-  [2] = "#8e8e8e", /* green   */
-  [3] = "#a0a0a0", /* yellow  */
-  [4] = "#686868", /* blue    */
-  [5] = "#747474", /* magenta */
-  [6] = "#868686", /* cyan    */
-  [7] = "#b9b9b9", /* white   */
+ /* 8 normal colors */
+  [0] = "#353535", /* black   */
+  [1] = "#744b40", /* red     */
+  [2] = "#6d6137", /* green   */
+  [3] = "#765636", /* yellow  */
+  [4] = "#61564b", /* blue    */
+  [5] = "#6b4a49", /* magenta */
+  [6] = "#435861", /* cyan    */
+  [7] = "#b3b3b3", /* white   */
 
   /* 8 bright colors */
-  [8]  = "#525252", /* black   */
-  [9]  = "#7c7c7c", /* red     */
-  [10] = "#8e8e8e", /* green   */
-  [11] = "#a0a0a0", /* yellow  */
-  [12] = "#686868", /* blue    */
-  [13] = "#747474", /* magenta */
-  [14] = "#868686", /* cyan    */
-  [15] = "#ffffff", /* white   */
+  [8]  = "#5f5f5f", /* black   */
+  [9]  = "#785850", /* red     */
+  [10] = "#6f6749", /* green   */
+  [11] = "#776049", /* yellow  */
+  [12] = "#696057", /* blue    */
+  [13] = "#6f5a59", /* magenta */
+  [14] = "#525f66", /* cyan    */
+  [15] = "#cdcdcd", /* white   */
+
   /* special colors */
-  //[256] = "#1e1e1e", [> background <]
-  [256] = "#000000", 
-  [257] = "#c0c5ce", /*[> foreground <]*/
+  [256] = "#131a1c", 
+  [257] = "#bdbeb0", /* foreground */
+  [255] = 0,
+
 
 };
-
-/*
- * Default colors (colorname index)
- * foreground, background, cursor
- */
  unsigned int defaultfg = 257;
  unsigned int defaultbg = 256;
  unsigned int defaultcs = 257;
  unsigned int defaultrcs= 258;
 
-/*
- * Colors used, when the specific fg == defaultfg. So in reverse mode this
- * will reverse too. Another logic would only make the simple feature too
- * complex.
- */
+
 static unsigned int defaultitalic = 7;
 static unsigned int defaultunderline = 7;
 /*

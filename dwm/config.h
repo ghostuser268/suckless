@@ -1,18 +1,21 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx = 0; /* border pixel of windows */
+static const unsigned int borderpx = 9; /* border pixel of windows */
 static const unsigned int gappx =38;
 static const unsigned int snap = 32; /* snap pixel */
 static const int user_bh = 50;
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar = 1;  /* 0 means bottom bar */
+static const int usealtbar          = 1;        /* 1 means use non-dwm status bar */
+static const char *altbarclass = "Polybar";     /* Alternate bar class name */
+static const char *altbarcmd  = "$HOME/confs/polybar/launch.sh"; /* Alternate bar launch command */
 static const char *fonts[] = {"Liga SFMono Nerd Font:style=Medium:size=10"};
 static const char dmenufont[] = "Liga SFMono Nerd Font:style=Medium:size=10";
 static const char *colors[][3] = {
     /*               fg         bg         border   */
-    [SchemeNorm] = {"#ffffff", "#000000", "#000000"},
-    [SchemeSel] = {"#ffffff", "#000000", "#ce473e"},
+    [SchemeNorm] = {"#bdbeb0", "#131a1c", "#22292b"},
+    [SchemeSel] = {"#bdbeb0", "#131a1c", "#22292b"},
 };
 /* tagging */
 static const char *tags[] = {"I", "II", "III", "IV"};
@@ -95,10 +98,10 @@ static Key keys[] = {
     {MODKEY, XK_Return, spawn, SHCMD("st")},
     {MODKEY, XK_p, spawn, SHCMD("st -e tmux")},
     {MODKEY, XK_F1, spawn,
-     SHCMD("sudo xbacklight -dec 10;kill -35 $(pidof dwmblocks)")},
+     SHCMD("xbacklight -dec 10;kill -35 $(pidof dwmblocks)")},
 
     {MODKEY, XK_F2, spawn,
-     SHCMD("sudo xbacklight -inc 10;kill -35 $(pidof dwmblocks)")},
+     SHCMD("xbacklight -inc 10;kill -35 $(pidof dwmblocks)")},
 
     {MODKEY, XK_F6, spawn,
      SHCMD(
@@ -129,3 +132,24 @@ static Button buttons[] = {
     {ClkTagBar, MODKEY, Button1, tag, {0}},
     {ClkTagBar, MODKEY, Button3, toggletag, {0}},
 };
+
+
+static const char *ipcsockpath = "/tmp/dwm.sock";
+static IPCCommand ipccommands[] = {
+  IPCCOMMAND(  view,                1,      {ARG_TYPE_UINT}   ),
+  IPCCOMMAND(  toggleview,          1,      {ARG_TYPE_UINT}   ),
+  IPCCOMMAND(  tag,                 1,      {ARG_TYPE_UINT}   ),
+  IPCCOMMAND(  toggletag,           1,      {ARG_TYPE_UINT}   ),
+  IPCCOMMAND(  tagmon,              1,      {ARG_TYPE_UINT}   ),
+  IPCCOMMAND(  focusmon,            1,      {ARG_TYPE_SINT}   ),
+  IPCCOMMAND(  focusstack,          1,      {ARG_TYPE_SINT}   ),
+  IPCCOMMAND(  zoom,                1,      {ARG_TYPE_NONE}   ),
+  IPCCOMMAND(  incnmaster,          1,      {ARG_TYPE_SINT}   ),
+  IPCCOMMAND(  killclient,          1,      {ARG_TYPE_SINT}   ),
+  IPCCOMMAND(  togglefloating,      1,      {ARG_TYPE_NONE}   ),
+  IPCCOMMAND(  setmfact,            1,      {ARG_TYPE_FLOAT}  ),
+  IPCCOMMAND(  setlayoutsafe,       1,      {ARG_TYPE_PTR}    ),
+  IPCCOMMAND(  quit,                1,      {ARG_TYPE_NONE}   )
+};
+
+
