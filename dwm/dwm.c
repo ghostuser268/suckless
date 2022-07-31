@@ -300,6 +300,8 @@ static int screen;
 static int sw, sh;      /* X display screen geometry width, height */
 static int bh, blw = 0; /* bar geometry */
 static int lrpad;       /* sum of left and right padding for text */
+static int vp;               /* vertical padding for bar */
+static int sp;               /* side padding for bar */
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
 static void (*handler[LASTEvent])(XEvent *) = {
@@ -629,7 +631,8 @@ void configurenotify(XEvent *e) {
         for (c = m->clients; c; c = c->next)
           if (c->isfullscreen)
             resizeclient(c, m->mx, m->my, m->mw, m->mh);
-	    XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, m->bh);
+	    /*XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, m->bh);*/
+	    XMoveResizeWindow(dpy, m->barwin, m->wx + sp, m->by + vp, m->ww -  2 * sp, bh);
       }
       focus(NULL);
       arrange(NULL);
@@ -772,8 +775,9 @@ void drawbar(Monitor *m) {
   /* draw status first so it can be overdrawn by tags later */
   if (m == selmon) { /* status is only drawn on selected monitor */
     drw_setscheme(drw, scheme[SchemeNorm]);
-    tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-    drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
+    tw = TEXTW(stext);
+
+    drw_text(drw, m->ww - tw - 2 * sp, 0, tw, bh, lrpad / 2, stext, 0);
   }
 
   for (c = m->clients; c; c = c->next) {
@@ -788,9 +792,6 @@ void drawbar(Monitor *m) {
         drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
     drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
     if (occ & 1 << i)
-      /*drw_rect(drw, x + boxs, boxs, boxw, boxw,*/
-      /*m == selmon && selmon->sel && selmon->sel->tags & 1 << i,*/
-      /*urg & 1 << i);*/
       drw_rect(drw, x + boxw, 0, w - (2 * boxw + 1), boxw,
                m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
                urg & 1 << i);
@@ -803,12 +804,12 @@ void drawbar(Monitor *m) {
   if ((w = m->ww - tw - x) > bh) {
     if (m->sel) {
       drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-      drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+      drw_text(drw, x, 0, w - 2 * sp, bh, lrpad / 2, m->sel->name, 0);
       if (m->sel->isfloating)
         drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
     } else {
       drw_setscheme(drw, scheme[SchemeNorm]);
-      drw_rect(drw, x, 0, w, bh, 1, 1);
+      drw_rect(drw, x, 0, w - 2 * sp, bh, 1, 1);
     }
   }
   drw_map(drw, m->barwin, 0, 0, m->ww, bh);
@@ -1651,11 +1652,13 @@ void setup(void) {
   drw = drw_create(dpy, screen, root, sw, sh);
   if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
     die("no fonts could be loaded.");
-  lrpad = drw->fonts->h;
-  /*bh = user_bh; //For bar height without polbar*/
-  bh = usealtbar ? 0 : drw->fonts->h + 2;
+  lrpad = drw->fonts->h + horizpadbar;
+    bh = usealtbar ? 0 : user_bh + vertpadbar;
+
 
   updategeom();
+  sp = sidepad;
+  vp = (topbar == 1) ? vertpad : - vertpad;
   /* init atoms */
   utf8string = XInternAtom(dpy, "UTF8_STRING", False);
   wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
@@ -1684,6 +1687,7 @@ void setup(void) {
   /* init bars */
   updatebars();
   updatestatus();
+  updatebarpos(selmon);
   /* supporting window for NetWMCheck */
   wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
   XChangeProperty(dpy, wmcheckwin, netatom[NetWMCheck], XA_WINDOW, 32,
@@ -1844,7 +1848,8 @@ void tile(Monitor *m) {
 void togglebar(const Arg *arg) {
   selmon->showbar = !selmon->showbar;
   updatebarpos(selmon);
-  XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, selmon->bh);
+  /*XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, selmon->bh);*/
+  XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + sp, selmon->by + vp, selmon->ww - 2 * sp, bh);
 
   arrange(selmon);
 }
@@ -1965,8 +1970,12 @@ void updatebars(void) {
   for (m = mons; m; m = m->next) {
     if (m->barwin)
       continue;
-    m->barwin = XCreateWindow(
-        dpy, root, m->wx, m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
+    /*m->barwin = XCreateWindow(*/
+        /*dpy, root, m->wx, m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),*/
+
+m->barwin = XCreateWindow(dpy, root, m->wx + sp, m->by + vp, m->ww - 2 * sp, bh, 0, DefaultDepth(dpy, screen),
+
+
         CopyFromParent, DefaultVisual(dpy, screen),
         CWOverrideRedirect | CWBackPixmap | CWEventMask, &wa);
     XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
@@ -1979,12 +1988,18 @@ void updatebarpos(Monitor *m) {
   m->wy = m->my;
   m->wh = m->mh;
   if (m->showbar) {
-    m->wh -= m->bh;
-    m->by = m->topbar ? m->wy : m->wy + m->wh;
-    m->wy = m->topbar ? m->wy + m->bh : m->wy;
+    /*m->wh -= m->bh;*/
+    /*m->by = m->topbar ? m->wy : m->wy + m->wh;*/
+    /*m->wy = m->topbar ? m->wy + m->bh : m->wy;*/
+
+
+   m->wh = m->wh - vertpad - bh;
+   m->by = m->topbar ? m->wy : m->wy + m->wh + vertpad;
+   m->wy = m->topbar ? m->wy + bh + vp : m->wy;
 
   } else
-    m->by = -m->bh;
+    /*m->by = -m->bh;*/
+    m->by = -bh - vp;
 }
 
 void updateclientlist() {

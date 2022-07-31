@@ -1,24 +1,31 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx = 9; /* border pixel of windows */
-static const unsigned int gappx =38;
-static const unsigned int snap = 32; /* snap pixel */
-static const int user_bh = 50;
-static const int showbar = 1; /* 0 means no bar */
-static const int topbar = 1;  /* 0 means bottom bar */
-static const int usealtbar          = 1;        /* 1 means use non-dwm status bar */
-static const char *altbarclass = "Polybar";     /* Alternate bar class name */
-static const char *altbarcmd  = "$HOME/confs/polybar/launch.sh"; /* Alternate bar launch command */
+static const unsigned int borderpx  = 9; /* border pixel of windows */
+static const unsigned int gappx     = 38;
+static const unsigned int snap      = 0; /* snap pixel */
+static const int showbar            = 1; /* 0 means no bar */
+static const int topbar 	    = 1;  /* 0 means bottom bar */
+static const int usealtbar          = 0;        
+static const char *altbarclass 	    = "Polybar";     
+//static const char *altbarcmd      = "$HOME/confs/polybar/launch.sh"; 
+static const char *altbarcmd        = ""; 
+
+static const int user_bh 	    = 40;
+static const int vertpad            = 10;       /* vertical padding of bar */
+static const int sidepad            = 10;       /* horizontal padding of bar */
+static const int horizpadbar        = 12;        /* horizontal padding for statusbar */
+static const int vertpadbar         = 12;        /* vertical padding for statusbar */
+
 static const char *fonts[] = {"Liga SFMono Nerd Font:style=Medium:size=10"};
 static const char dmenufont[] = "Liga SFMono Nerd Font:style=Medium:size=10";
 static const char *colors[][3] = {
     /*               fg         bg         border   */
-    [SchemeNorm] = {"#bdbeb0", "#131a1c", "#22292b"},
-    [SchemeSel] = {"#bdbeb0", "#131a1c", "#22292b"},
+    [SchemeNorm] = {"#bdbeb0", "#030303", "#030303"},
+    [SchemeSel] = {"#bdbeb0", "#030303", "#030303"},
 };
 /* tagging */
-static const char *tags[] = {"I", "II", "III", "IV"};
+static const char *tags[] = {"I", "II", "III", "IV", "V"};
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -63,7 +70,6 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0";
 static const char *dmenucmd[] = {"dmenu_run", "-m",  dmenumon, "-fn",
                                  dmenufont,   "-nb", NULL};
-
 static const char *termcmd[] = {"st", NULL};
 
 static Key keys[] = {
@@ -94,7 +100,6 @@ static Key keys[] = {
     {MODKEY, XK_minus, setgaps, {.i = -1}},
     {MODKEY, XK_equal, setgaps, {.i = +1}},
     {MODKEY | ShiftMask, XK_equal, setgaps, {.i = 0}},
-
     {MODKEY, XK_Return, spawn, SHCMD("st")},
     {MODKEY, XK_p, spawn, SHCMD("st -e tmux")},
     {MODKEY, XK_F1, spawn,

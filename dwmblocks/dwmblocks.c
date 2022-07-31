@@ -53,7 +53,6 @@ static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
 static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
 static int returnStatus = 0;
-
 // opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output) {
   strcpy(output, block->icon);
@@ -76,6 +75,7 @@ void getcmd(const Block *block, char *output) {
     output[i++] = '\0';
   pclose(cmdf);
 }
+
 
 void getcmds(int time) {
   const Block *current;
