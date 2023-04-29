@@ -5,9 +5,16 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liga SFMono Nerd Font:style=Medium:pixelsize=12:antialias=true:autohint=true";
-//static int borderpx = 15;
-static int borderpx = 5;
+// static char *font =
+//"Liga SFMono Nerd "
+//"Font:style=Medium:pixelsize=12:antialias=true:autohint=true";
+
+static char *font =
+    "Liga SFMono Nerd"
+    "Font:style=Medium:pixelsize=12:antialias=true:autohint=true";
+
+static int borderpx = 21;
+// static int borderpx = 5;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -76,14 +83,13 @@ static int bellvolume = 0;
 
 /* default TERM value */
 char *termname = "st-256color";
-float alpha = 0.7;
-
+float alpha = 0.9;
 /*
  * spaces per tab
  *
  * When you are changing this value, don't forget to adapt the »it« value in
- * the st.info and appropriately install the st.info in the environment where
- * you use this st version.
+ * the st.info and appropriately install the st.info in the environment
+ *where you use this st version.
  *
  *	it#$tabspaces,
  *
@@ -98,39 +104,36 @@ unsigned int tabspaces = 8;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 
-  /* 8 normal colors */
-  [0] = "#202020", /* black   */
-  [1] = "#b91e2e", /* red     */
-  [2] = "#81957c", /* green   */
-  [3] = "#f9bb80", /* yellow  */
-  [4] = "#356579", /* blue    */
-  [5] = "#2d2031", /* magenta */
-  [6] = "#0b3452", /* cyan    */
-  [7] = "#909090", /* white   */
+    /* 8 normal colors */
+    [0] = "#141617", /* black   */
+    [1] = "#7c7c7c", /* red     */
+    [2] = "#8e8e8e", /* green   */
+    [3] = "#a0a0a0", /* yellow  */
+    [4] = "#686868", /* blue    */
+    [5] = "#747474", /* magenta */
+    [6] = "#868686", /* cyan    */
+    [7] = "#b9b9b9", /* white   */
 
-  /* 8 bright colors */
-  [8]  = "#606060", /* black   */
-  [9]  = "#d14548", /* red     */
-  [10] = "#a7b79a", /* green   */
-  [11] = "#fae3a0", /* yellow  */
-  [12] = "#7491a1", /* blue    */
-  [13] = "#87314e", /* magenta */
-  [14] = "#0f829d", /* cyan    */
-  [15] = "#fff0f0", /* white   */
-
-  /* special colors */
-  [256] = "#030303", /* background */
-  [257] = "#d2c5bc", /* foreground */
-};
+    /* 8 bright colors */
+    [8] = "#525252",  /* black   */
+    [9] = "#7c7c7c",  /* red     */
+    [10] = "#8e8e8e", /* green   */
+    [11] = "#a0a0a0", /* yellow  */
+    [12] = "#686868", /* blue    */
+    [13] = "#747474", /* magenta */
+    [14] = "#868686", /* cyan    */
+    [15] = "#f7f7f7",
+    /* white   */ /* white   */};
 
 /*
  * Default colors (colorname index)
- * foreground, background, cursor
+- * foreground, background, cursor, reverse cursor
++ * foreground, background, cursor
  */
-unsigned int defaultfg = 257;
-unsigned int defaultbg = 256;
-unsigned int defaultcs = 257;
-unsigned int defaultrcs= 258;
+unsigned int defaultfg = 15;
+unsigned int defaultbg = 0;
+static unsigned int defaultcs = 15;
+static unsigned int defaultrcs = 257;
 
 /*
  * Colors used, when the specific fg == defaultfg. So in reverse mode this
@@ -139,7 +142,6 @@ unsigned int defaultrcs= 258;
  */
 static unsigned int defaultitalic = 7;
 static unsigned int defaultunderline = 7;
-
 
 /*
  * Default shape of cursor

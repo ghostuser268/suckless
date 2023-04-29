@@ -11,6 +11,7 @@
 #include <locale.h>
 #include <math.h>
 #include <signal.h>
+#include <stdio.h>
 #include <sys/select.h>
 #include <time.h>
 #include <unistd.h>
@@ -240,6 +241,7 @@ static char *usedfont = NULL;
 static double usedfontsize = 0;
 static double defaultfontsize = 0;
 static char *opt_alpha = NULL;
+static char *opt_background = NULL;
 
 static char *opt_class = NULL;
 static char **opt_cmd = NULL;
@@ -693,6 +695,10 @@ void xloadcols(void) {
   int i;
   static int loaded;
   Color *cp;
+
+  if (opt_background) {
+    colorname[0] = opt_background;
+  }
 
   if (loaded) {
     for (cp = dc.col; cp < &dc.col[dc.collen]; ++cp)
@@ -1804,6 +1810,10 @@ int main(int argc, char *argv[]) {
   xsetcursor(cursorshape);
 
   ARGBEGIN {
+  case 'B':
+    opt_background = EARGF(usage());
+    break;
+
   case 'a':
     allowaltscreen = 0;
     break;

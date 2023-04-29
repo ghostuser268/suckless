@@ -7,7 +7,7 @@ esac
 
 
 card='wlp1s0'
-interval=5
+interval=2
 declare -i rpf=0
 frpf=0.0
 
@@ -26,21 +26,22 @@ if [ $rpf -ge 1000 ]; then
 	prefix=" MB/s"
 fi
 }
-	rx1=$(cat /sys/class/net/wlp1s0/statistics/rx_bytes)
-	tx1=$(cat /sys/class/net/wlp1s0/statistics/tx_bytes)
-	sleep $interval
-	rx2=$(cat /sys/class/net/wlp1s0/statistics/rx_bytes)
-	tx2=$(cat /sys/class/net/wlp1s0/statistics/tx_bytes)
 
-	rx=$((($rx2-$rx1)/$interval))
-	tx=$((($tx2-$tx1)/$interval))
+rx1=$(cat /sys/class/net/wlp1s0/statistics/rx_bytes)
+tx1=$(cat /sys/class/net/wlp1s0/statistics/tx_bytes)
+sleep $interval
+rx2=$(cat /sys/class/net/wlp1s0/statistics/rx_bytes)
+tx2=$(cat /sys/class/net/wlp1s0/statistics/tx_bytes)
+
+rx=$((($rx2-$rx1)/$interval))
+tx=$((($tx2-$tx1)/$interval))
 
 
-	icon=""
-	get_speed $rx
-	echo -n " $icon |  $frpf$prefix "
-	get_speed $tx
-	echo "  $frpf$prefix "
+icon=""
+get_speed $rx
+echo -n " $icon |  $frpf$prefix "
+get_speed $tx
+echo "  $frpf$prefix "
 
 
 

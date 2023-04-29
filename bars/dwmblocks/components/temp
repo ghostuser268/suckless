@@ -7,7 +7,7 @@ case $BUTTON in
 esac
 
 gpu=$(sensors | awk '/edge/ {print $2}')
-temp=$(cat '/sys/class/hwmon/hwmon3/temp1_input')
+temp=$(cat '/sys/class/hwmon/hwmon5/temp1_input')
 icon=
 
 echo " ${icon} | C:${temp:0:2}° G:${gpu:1:2}° "

@@ -1,31 +1,54 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 9; /* border pixel of windows */
-static const unsigned int gappx     = 38;
-static const unsigned int snap      = 0; /* snap pixel */
-static const int showbar            = 1; /* 0 means no bar */
-static const int topbar 	    = 1;  /* 0 means bottom bar */
-static const int usealtbar          = 0;        
-static const char *altbarclass 	    = "Polybar";     
-//static const char *altbarcmd      = "$HOME/confs/polybar/launch.sh"; 
-static const char *altbarcmd        = ""; 
+static const unsigned int borderpx = 1; /* border pixel of windows */
+static const unsigned int gappx = 30;
+static const unsigned int snap = 0; /* snap pixel */
+static const int showbar = 1;       /* 0 means no bar */
+static const int topbar = 1;        /* 0 means bottom bar */
+static const int usealtbar = 0;
 
-static const int user_bh 	    = 40;
-static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
-static const int horizpadbar        = 12;        /* horizontal padding for statusbar */
-static const int vertpadbar         = 12;        /* vertical padding for statusbar */
+static const char *altbarclass = "";
+static const char *altbarcmd = "";
 
-static const char *fonts[] = {"Liga SFMono Nerd Font:style=Medium:size=10"};
-static const char dmenufont[] = "Liga SFMono Nerd Font:style=Medium:size=10";
+// POLYBAR
+// static const char *altbarclass = "Polybar";
+// static const char *altbarcmd = "$HOME/personal/confs/polybar/launch.sh";
+
+// LEMONBAR
+// static const char *altbarclass = "Lemonbar";
+// static const char *altbarcmd =
+//"${HOME}/personal/suckless/bars/lemonbar/test.sh | lemonbar -dbp";
+
+static const int bar_padding = 5;
+
+static const unsigned int baralpha = 0xff;
+static const unsigned int borderalpha = OPAQUE;
+
+static const int user_bh = 5;
+static const int vertpad = 0;      /* vertical padding of bar */
+static const int sidepad = 0;      /* horizontal padding of bar */
+static const int horizpadbar = 10; /* horizontal padding for statusbar */
+static const int vertpadbar = 40;  /* vertical padding for statusbar */
+
+static const char *fonts[] = {
+    "Iosevka Orw,Iosevka Orw Medium Oblique:style Font: size=10"};
+static const char dmenufont[] =
+    "Iosevka Orw,Iosevka Orw Medium Oblique:style Font: size=29";
+// Iosevka Orw,Iosevka Orw Medium Oblique:style
 static const char *colors[][3] = {
     /*               fg         bg         border   */
-    [SchemeNorm] = {"#bdbeb0", "#030303", "#030303"},
-    [SchemeSel] = {"#bdbeb0", "#030303", "#030303"},
+    [SchemeNorm] = {"#ffffff", "#000000", "#000000"},
+    [SchemeSel] = {"#ffffff", "#000000", "#ffffff"},
+};
+
+static const unsigned int alphas[][3] = {
+    /*               fg      bg        border     */
+    [SchemeNorm] = {OPAQUE, baralpha, borderalpha},
+    [SchemeSel] = {OPAQUE, baralpha, borderalpha},
 };
 /* tagging */
-static const char *tags[] = {"I", "II", "III", "IV", "V"};
+static const char *tags[] = {"I", "II", "III", "IV"};
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -91,10 +114,12 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_space, togglefloating, {0}},
     {MODKEY, XK_0, view, {.ui = ~0}},
     {MODKEY | ShiftMask, XK_0, tag, {.ui = ~0}},
-    {MODKEY, XK_Left, focusstack, {.i = -1}},
-    {MODKEY, XK_Right, focusstack, {.i = +1}},
-    {MODKEY, XK_Up, focusmon, {.i = -1}},
-    {MODKEY, XK_Left, focusmon, {.i = +1}},
+
+    {MODKEY, XK_Left, focusmon, {.i = -1}},
+    {MODKEY, XK_Right, focusmon, {.i = +1}},
+    {MODKEY, XK_Up, focusstack, {.i = -1}},
+    {MODKEY, XK_Down, focusstack, {.i = +1}},
+
     {MODKEY | ShiftMask, XK_Left, tagmon, {.i = -1}},
     {MODKEY | ShiftMask, XK_Right, tagmon, {.i = +1}},
     {MODKEY, XK_minus, setgaps, {.i = -1}},
@@ -138,23 +163,19 @@ static Button buttons[] = {
     {ClkTagBar, MODKEY, Button3, toggletag, {0}},
 };
 
-
 static const char *ipcsockpath = "/tmp/dwm.sock";
 static IPCCommand ipccommands[] = {
-  IPCCOMMAND(  view,                1,      {ARG_TYPE_UINT}   ),
-  IPCCOMMAND(  toggleview,          1,      {ARG_TYPE_UINT}   ),
-  IPCCOMMAND(  tag,                 1,      {ARG_TYPE_UINT}   ),
-  IPCCOMMAND(  toggletag,           1,      {ARG_TYPE_UINT}   ),
-  IPCCOMMAND(  tagmon,              1,      {ARG_TYPE_UINT}   ),
-  IPCCOMMAND(  focusmon,            1,      {ARG_TYPE_SINT}   ),
-  IPCCOMMAND(  focusstack,          1,      {ARG_TYPE_SINT}   ),
-  IPCCOMMAND(  zoom,                1,      {ARG_TYPE_NONE}   ),
-  IPCCOMMAND(  incnmaster,          1,      {ARG_TYPE_SINT}   ),
-  IPCCOMMAND(  killclient,          1,      {ARG_TYPE_SINT}   ),
-  IPCCOMMAND(  togglefloating,      1,      {ARG_TYPE_NONE}   ),
-  IPCCOMMAND(  setmfact,            1,      {ARG_TYPE_FLOAT}  ),
-  IPCCOMMAND(  setlayoutsafe,       1,      {ARG_TYPE_PTR}    ),
-  IPCCOMMAND(  quit,                1,      {ARG_TYPE_NONE}   )
-};
-
-
+    IPCCOMMAND(view, 1, {ARG_TYPE_UINT}),
+    IPCCOMMAND(toggleview, 1, {ARG_TYPE_UINT}),
+    IPCCOMMAND(tag, 1, {ARG_TYPE_UINT}),
+    IPCCOMMAND(toggletag, 1, {ARG_TYPE_UINT}),
+    IPCCOMMAND(tagmon, 1, {ARG_TYPE_UINT}),
+    IPCCOMMAND(focusmon, 1, {ARG_TYPE_SINT}),
+    IPCCOMMAND(focusstack, 1, {ARG_TYPE_SINT}),
+    IPCCOMMAND(zoom, 1, {ARG_TYPE_NONE}),
+    IPCCOMMAND(incnmaster, 1, {ARG_TYPE_SINT}),
+    IPCCOMMAND(killclient, 1, {ARG_TYPE_SINT}),
+    IPCCOMMAND(togglefloating, 1, {ARG_TYPE_NONE}),
+    IPCCOMMAND(setmfact, 1, {ARG_TYPE_FLOAT}),
+    IPCCOMMAND(setlayoutsafe, 1, {ARG_TYPE_PTR}),
+    IPCCOMMAND(quit, 1, {ARG_TYPE_NONE})};

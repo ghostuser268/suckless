@@ -1,0 +1,8 @@
+#! /bin/sh
+
+
+icon=""
+disk=$(df -h | awk ' /nvme0n1p9/  {printf $3" | "$4}')
+
+printf " %s %s " "$icon" "$disk"
+
